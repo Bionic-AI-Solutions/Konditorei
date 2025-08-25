@@ -7,7 +7,7 @@ metadata:
     app: konditorei-backend
     version: v1
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: konditorei-backend
@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: docker4zerocool/kondetorei-backend:main
+        image: docker4zerocool/kondetorei-backend:fad675b74f9154ca742fddf9332b471bf856e4dd
         ports:
         - containerPort: 8000
         resources:
