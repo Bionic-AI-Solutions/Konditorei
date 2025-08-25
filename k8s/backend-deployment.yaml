@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: konditorei-backend
+  namespace: ChatBots
+  labels:
+    app: konditorei-backend
+    version: v1
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: konditorei-backend
+  template:
+    metadata:
+      labels:
+        app: konditorei-backend
+        version: v1
+    spec:
+      containers:
+      - name: backend
+        image: bionicaisolutions/konditorei-backend:latest
+        ports:
+        - containerPort: 8000
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        env:
+        - name: NODE_ENV
+          value: "production"
+        - name: REACT_APP_WIDGET_AGENT_ID
+          valueFrom:
+            configMapKeyRef:
+              name: konditorei-config
+              key: REACT_APP_WIDGET_AGENT_ID
+      imagePullSecrets:
+      - name: regcred

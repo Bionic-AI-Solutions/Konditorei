@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ChatBots
+  labels:
+    name: ChatBots
+    app: konditorei-widget
+

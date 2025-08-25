@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: konditorei-config
+  namespace: ChatBots
+  labels:
+    app: konditorei-frontend
+data:
+  REACT_APP_ENVIRONMENT: "production"
+  REACT_APP_API_URL: "https://konditorei.bionicaisolutions.com/api"
+  REACT_APP_WIDGET_AGENT_ID: "agent_6401k3d96afze6cbtcx585yqa3sa"
+
