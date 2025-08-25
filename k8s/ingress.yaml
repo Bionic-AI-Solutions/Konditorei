@@ -11,17 +11,16 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-connect-timeout: "30"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
-    # cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
   labels:
     app: konditorei-frontend
 spec:
-  # Commented out TLS for testing - uncomment when domain is configured
-  # tls:
-  # - hosts:
-  #   - konditorei.bionicaisolutions.com
-  #   secretName: konditorei-tls
+  tls:
+  - hosts:
+    - konditorei.askcollections.com
+    secretName: konditorei-tls
   rules:
-  - host: konditorei.bionicaisolutions.com
+  - host: konditorei.askcollections.com
     http:
       paths:
       - path: /
