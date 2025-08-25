@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: bionicaisolutions/konditorei:latest
+        image: docker4zerocool/kondetorei:latest
         ports:
         - containerPort: 80
         resources:
