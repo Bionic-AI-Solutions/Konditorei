@@ -88,39 +88,12 @@ jobs:
         cache-from: type=gha
         cache-to: type=gha,mode=max
 
-  deploy:
-    needs: build-and-push
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    
-    steps:
-    - uses: actions/checkout@v4
-    
-    - name: Set up kubectl
-      uses: azure/setup-kubectl@v3
-      with:
-        version: 'latest'
-    
-    - name: Configure kubectl
-      run: |
-        echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > kubeconfig.yaml
-        export KUBECONFIG=kubeconfig.yaml
-    
-    - name: Deploy to Kubernetes
-      run: |
-        # Update image tags in deployment manifests
-        sed -i "s|konditorei-frontend:latest|${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}|g" k8s/deployment.yaml
-        sed -i "s|konditorei-backend:latest|${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-backend:${{ github.sha }}|g" k8s/deployment.yaml
-        
-        # Apply manifests
-        kubectl apply -f k8s/
-        
-        # Wait for deployment to be ready
-        kubectl rollout status deployment/konditorei-frontend -n konditorei --timeout=300s
-        kubectl rollout status deployment/konditorei-backend -n konditorei --timeout=300s
+  # Note: Kubernetes deployment is handled by ArgoCD
+  # The ArgoCD application will automatically sync when new images are pushed
+  # No direct kubectl deployment needed since cluster is not internet-accessible
 
   notify:
-    needs: [test, build-and-push, deploy]
+    needs: [test, build-and-push]
     runs-on: ubuntu-latest
     if: always()
     
@@ -129,7 +102,9 @@ jobs:
       if: success()
       run: |
         echo "✅ CI/CD Pipeline completed successfully!"
-        echo "🚀 Application deployed to: https://konditorei.bionicaisolutions.com"
+        echo "🐳 Docker images pushed to: docker.io/docker4zerocool/kondetorei"
+        echo "🔄 ArgoCD will automatically sync and deploy to Kubernetes"
+        echo "🌐 Application will be available at: https://konditorei.bionicaisolutions.com"
     
     - name: Notify on failure
       if: failure()
