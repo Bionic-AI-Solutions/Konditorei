@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: konditorei-config
-  namespace: ChatBots
+  namespace: chatbots
   labels:
     app: konditorei-frontend
 data:

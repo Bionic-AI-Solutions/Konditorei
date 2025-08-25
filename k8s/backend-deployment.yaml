@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: konditorei-backend
-  namespace: ChatBots
+  namespace: chatbots
   labels:
     app: konditorei-backend
     version: v1
