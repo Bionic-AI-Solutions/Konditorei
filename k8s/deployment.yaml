@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: docker4zerocool/kondetorei:main
+        image: docker4zerocool/kondetorei:main-1756191772
         ports:
         - containerPort: 80
         resources:

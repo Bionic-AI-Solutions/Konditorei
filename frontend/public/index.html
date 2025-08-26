@@ -27,6 +27,89 @@
     <!-- ElevenLabs Convai Widget Script -->
     <elevenlabs-convai agent-id="agent_6401k3d96afze6cbtcx585yqa3sa"></elevenlabs-convai>
     <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
+
+    <!-- Widget Error Handling Script -->
+    <script>
+        // Check if we're on HTTPS or localhost
+        function isSecureContext() {
+            return window.location.protocol === 'https:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        }
+
+        // Handle getUserMedia errors
+        window.addEventListener('error', function (event) {
+            if (event.error && event.error.message && event.error.message.includes('getUserMedia')) {
+                console.error('getUserMedia error detected:', event.error);
+
+                // Create a user-friendly error message
+                const errorDiv = document.createElement('div');
+                errorDiv.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: #ff6b6b;
+                    color: white;
+                    padding: 15px 20px;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                    z-index: 10000;
+                    max-width: 300px;
+                    font-family: 'Inter', sans-serif;
+                    font-size: 14px;
+                `;
+                errorDiv.innerHTML = `
+                    <strong>Microphone Access Issue</strong><br>
+                    This feature requires HTTPS. Please contact support for SSL setup.
+                `;
+
+                document.body.appendChild(errorDiv);
+
+                // Remove after 10 seconds
+                setTimeout(() => {
+                    if (errorDiv.parentNode) {
+                        errorDiv.parentNode.removeChild(errorDiv);
+                    }
+                }, 10000);
+            }
+        });
+
+        // Enhanced widget debugging
+        window.addEventListener('load', function () {
+            console.log('Page loaded, checking widget setup...');
+            
+            if (!isSecureContext()) {
+                console.warn('Page is not served over HTTPS - getUserMedia may not work');
+            } else {
+                console.log('✅ HTTPS context confirmed');
+            }
+
+            // Check if widget element exists
+            const widgetElement = document.querySelector('elevenlabs-convai');
+            if (widgetElement) {
+                console.log('✅ Widget element found:', widgetElement);
+                console.log('Agent ID:', widgetElement.getAttribute('agent-id'));
+            } else {
+                console.error('❌ Widget element not found');
+            }
+
+            // Monitor for widget script loading
+            setTimeout(() => {
+                if (window.ElevenLabsConvaiWidget) {
+                    console.log('✅ ElevenLabs widget script loaded');
+                } else {
+                    console.warn('⚠️ ElevenLabs widget script not detected');
+                }
+            }, 2000);
+
+            // Monitor for CSP violations
+            document.addEventListener('securitypolicyviolation', function(event) {
+                console.error('CSP Violation:', {
+                    directive: event.violatedDirective,
+                    blockedURI: event.blockedURI,
+                    sourceFile: event.sourceFile
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>
