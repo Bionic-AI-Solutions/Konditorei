@@ -2,12 +2,12 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: konditorei-frontend
-  namespace: ChatBots
+  namespace: chatbots
   labels:
     app: konditorei-frontend
     version: v1
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: konditorei-frontend
@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: bionicaisolutions/konditorei:latest
+        image: docker4zerocool/konditorei:latest
         ports:
         - containerPort: 80
         resources:
@@ -44,6 +44,4 @@ spec:
         env:
         - name: NODE_ENV
           value: "production"
-      imagePullSecrets:
-      - name: regcred
 

@@ -2,12 +2,12 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: konditorei-backend
-  namespace: ChatBots
+  namespace: chatbots
   labels:
     app: konditorei-backend
     version: v1
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: konditorei-backend
@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: bionicaisolutions/konditorei-backend:latest
+        image: docker4zerocool/konditorei-backend:latest
         ports:
         - containerPort: 8000
         resources:
@@ -49,5 +49,3 @@ spec:
             configMapKeyRef:
               name: konditorei-config
               key: REACT_APP_WIDGET_AGENT_ID
-      imagePullSecrets:
-      - name: regcred
